@@ -18,7 +18,8 @@
         "symfony/http-client": "7.4.*",
         "symfony/messenger": "7.4.*",
         "symfony/runtime": "7.4.*",
-        "symfony/yaml": "7.4.*"
+        "symfony/yaml": "7.4.*",
+        "webmozart/assert": "^2.1.6"
     },
     "config": {
         "allow-plugins": {
