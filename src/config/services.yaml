@@ -7,6 +7,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.user_api_url: '%env(USER_API_URL)%'
 
 services:
     # default configuration for services in *this* file
@@ -18,6 +19,42 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
+        exclude:
+            - '../src/Domain/Model/'
+            - '../src/Domain/ValueObject/'
+            - '../src/Domain/Exception/'
+            - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # Controllers
+    App\UI\Http\Controller\:
+        resource: '../src/UI/Http/Controller/'
+        tags: ['controller.service_arguments']
+
+    # Application Layer (Command Handlers, Query Handlers)
+    App\Application\:
+        resource: '../src/Application/'
+
+    # Infrastructure Layer (Repositories, Adapters)
+    App\Infrastructure\:
+        resource: '../src/Infrastructure/'
+
+    # Domain Services
+    App\Domain\Service\:
+        resource: '../src/Domain/Service/'
+
+    # Domain Factory
+    App\Domain\Factory\:
+        resource: '../src/Domain/Factory/'
+
+    # Configure JsonPlaceholderUserAdapter with API URL from environment
+    App\Infrastructure\Adapter\JsonPlaceholderUserAdapter:
+        arguments:
+            $apiUrl: '%app.user_api_url%'
+
+    # Bind interfaces to implementations
+    App\Domain\Repository\UserRepositoryInterface:
+        alias: App\Infrastructure\Repository\DoctrineUserRepository
+
+    App\Domain\Service\UserApiAdapterInterface:
+        alias: App\Infrastructure\Adapter\JsonPlaceholderUserAdapter
+
