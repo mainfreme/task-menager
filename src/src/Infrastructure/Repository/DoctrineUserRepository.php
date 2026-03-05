@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\Model\User\User;
+use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\Username;
+use App\Infrastructure\Persistence\Doctrine\Entity\UserEntity;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineUserRepository implements UserRepositoryInterface
@@ -19,32 +20,63 @@ final class DoctrineUserRepository implements UserRepositoryInterface
 
     public function findAll(): array
     {
-        return $this->entityManager->getRepository(User::class)->findAll();
+        $entities = $this->entityManager->getRepository(UserEntity::class)->findAll();
+
+        return array_map(
+            static fn (UserEntity $entity): User => $entity->toDomain(),
+            $entities
+        );
     }
 
     public function findById(int $id): ?User
     {
-        return $this->entityManager->getRepository(User::class)->find($id);
+        $entity = $this->entityManager->getRepository(UserEntity::class)->find($id);
+
+        return $entity?->toDomain();
     }
 
     public function findByUsername(Username $username): ?User
     {
-        return $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username->getValue()]);
+        $entity = $this->entityManager->createQueryBuilder()
+            ->select('u')
+            ->from(UserEntity::class, 'u')
+            ->where('u.username.value = :username')
+            ->setParameter('username', $username->getValue())
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $entity?->toDomain();
     }
 
     public function findByEmail(Email $email): ?User
     {
-        return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email->getValue()]);
+        $entity = $this->entityManager->createQueryBuilder()
+            ->select('u')
+            ->from(UserEntity::class, 'u')
+            ->where('u.email.value = :email')
+            ->setParameter('email', $email->getValue())
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $entity?->toDomain();
     }
 
     public function save(User $user): void
     {
-        $this->entityManager->persist($user);
+        $this->entityManager->persist(UserEntity::fromDomain($user));
     }
 
     public function existUserByEmail(Email $email): bool
     {
-        return $this->entityManager->getRepository(User::class)->count(['email' => $email->getValue()]) > 0;
+        $count = (int) $this->entityManager->createQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->from(UserEntity::class, 'u')
+            ->where('u.email.value = :email')
+            ->setParameter('email', $email->getValue())
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $count > 0;
     }
 
     public function flush(): void
