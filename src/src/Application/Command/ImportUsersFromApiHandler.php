@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Application\Command;
 
+use App\Application\DTO\ImportUsersResult;
 use App\Domain\Exception\UserCreationException;
 use App\Domain\Factory\UserFactoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\Service\UserApiAdapterInterface;
 use App\Domain\ValueObject\Email;
 use Psr\Log\LoggerInterface;
-use App\Application\DTO\ImportUsersResult;
 
 final class ImportUsersFromApiHandler
 {
