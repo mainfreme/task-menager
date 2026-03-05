@@ -5,17 +5,18 @@ declare(strict_types=1);
 namespace App\Application\Command;
 
 use App\Domain\Exception\UserCreationException;
-use App\Domain\Factory\UserFactory;
+use App\Domain\Factory\UserFactoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\Service\UserApiAdapterInterface;
 use App\Domain\ValueObject\Email;
 use Psr\Log\LoggerInterface;
+use App\Application\DTO\ImportUsersResult;
 
 final class ImportUsersFromApiHandler
 {
     public function __construct(
         private readonly UserApiAdapterInterface $userApiAdapter,
-        private readonly UserFactory $userFactory,
+        private readonly UserFactoryInterface $userFactory,
         private readonly UserRepositoryInterface $userRepository,
         private readonly LoggerInterface $logger,
     ) {
