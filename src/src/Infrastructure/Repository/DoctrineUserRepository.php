@@ -8,12 +8,12 @@ use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\Model\User\User;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\Username;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineUserRepository implements UserRepositoryInterface
 {
     public function __construct(
-        private EntityManager $entityManager,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
