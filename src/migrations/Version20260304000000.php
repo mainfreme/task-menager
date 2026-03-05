@@ -16,18 +16,19 @@ final class Version20260304000000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE user (
-            id INT NOT NULL,
+        $this->addSql('CREATE TABLE users (
+            id SERIAL NOT NULL,
             name VARCHAR(255) NOT NULL,
             username VARCHAR(100) NOT NULL,
             email VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
             address_street VARCHAR(255) DEFAULT NULL,
             address_suite VARCHAR(100) DEFAULT NULL,
             address_city VARCHAR(255) DEFAULT NULL,
             address_zipcode VARCHAR(20) DEFAULT NULL,
             address_geo_lat VARCHAR(50) DEFAULT NULL,
             address_geo_lng VARCHAR(50) DEFAULT NULL,
-            phone VARCHAR(50) DEFAULT NULL,
+            phone VARCHAR(15) DEFAULT NULL,
             website VARCHAR(255) DEFAULT NULL,
             company_name VARCHAR(255) DEFAULT NULL,
             company_catch_phrase VARCHAR(500) DEFAULT NULL,
@@ -35,14 +36,13 @@ final class Version20260304000000 extends AbstractMigration
             created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL,
             PRIMARY KEY(id)
         )');
-        
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649F85E0677 ON user (username)');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON user (email)');
-        $this->addSql('COMMENT ON COLUMN user.created_at IS \'(DC2Type:datetime_immutable)\'');
+
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON users (email)');
+        $this->addSql('COMMENT ON COLUMN users.created_at IS \'(DC2Type:datetime_immutable)\'');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE user');
+        $this->addSql('DROP TABLE users');
     }
 }
