@@ -18,8 +18,8 @@ final class Geo extends ValueObject
 
     public function __construct(string $lat, string $lng)
     {
-        Assert::notEmpty($lat, 'Szerokość geograficzna (lat) nie może być pusta');
-        Assert::notEmpty($lng, 'Długość geograficzna (lng) nie może być pusta');
+        Assert::notSame($lat, '', 'Szerokość geograficzna (lat) nie może być pusta');
+        Assert::notSame($lng, '', 'Długość geograficzna (lng) nie może być pusta');
         Assert::range(
             (float)$lat, 
             -90, 

@@ -17,11 +17,9 @@ final class Website extends StringValueObject
     protected function validate(string $value): void
     {
         Assert::notEmpty($value, 'Strona internetowa nie może być pusta');
-        Assert::true(
-            (bool) filter_var($value, FILTER_VALIDATE_URL),
-            'Nieprawidłowy URL: %s',
-            [$value]
-        );
+        
+        $isValidUrl = filter_var($value, FILTER_VALIDATE_URL) !== false;
+        Assert::true($isValidUrl, sprintf('Nieprawidłowy URL: %s', $value));
     }
 
     public static function fromString(string $value): self
