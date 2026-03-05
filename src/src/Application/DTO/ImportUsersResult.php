@@ -7,9 +7,6 @@ namespace App\Application\DTO;
 final class ImportUsersResult
 {
     /**
-     * @param int $imported
-     * @param int $skipped
-     * @param int $failed
      * @param array<string> $errors
      */
     public function __construct(
