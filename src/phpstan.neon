@@ -1,0 +1,16 @@
+parameters:
+    level: 7
+    paths:
+        - src
+        - config
+    excludePaths:
+        - config/bundles.php
+        - config/reference.php
+
+    # DDD / przepływ danych – strict rules (włączane przez phpstan-strict-rules)
+    # Wymusza m.in.:
+    # - poprawne typowanie i przepływ danych
+    # - brak nieużywanych zmiennych
+    # - spójne użycie klas wewnątrz klas
+    # - brak martwego kodu
+    reportUnmatchedIgnoredErrors: false
