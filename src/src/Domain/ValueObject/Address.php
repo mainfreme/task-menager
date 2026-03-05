@@ -10,38 +10,22 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Address extends ValueObject
 {
-    #[ORM\Column(name: "street", type: "string", length: 255)]
-    private string $street;
-
-    #[ORM\Column(name: "suite", type: "string", length: 100)]
-    private string $suite;
-
-    #[ORM\Column(name: "city", type: "string", length: 100)]
-    private string $city;
-
-    #[ORM\Embedded(class: ZipCode::class)]
-    private ZipCode $zipCode;
-
-    #[ORM\Embedded(class: Geo::class)]
-    private Geo $geo;
 
     public function __construct(
-        string $street,
-        string $suite,
-        string $city,
-        ZipCode $zipCode,
-        Geo $geo,
-    )
-    {
+        #[ORM\Column(name: 'street', type: 'string', length: 255, nullable: true)]
+        private string $street,
+        #[ORM\Column(name: 'suite', type: 'string', length: 100, nullable: true)]
+        private string $suite,
+        #[ORM\Column(name: 'city', type: 'string', length: 255, nullable: true)]
+        private string $city,
+        #[ORM\Embedded(class: ZipCode::class, columnPrefix: false)]
+        private ZipCode $zipCode,
+        #[ORM\Embedded(class: Geo::class, columnPrefix: 'geo_')]
+        private Geo $geo,
+    ) {
         Assert::notEmpty($street, 'Ulica nie może być pusta');
         Assert::notEmpty($suite, 'Numer lokalu nie może być pusty');
         Assert::notEmpty($city, 'Miasto nie może być puste');
-
-        $this->street = $street;
-        $this->suite = $suite;
-        $this->city = $city;
-        $this->zipCode = $zipCode;
-        $this->geo = $geo;
     }
 
     public static function fromArray(array $data): self

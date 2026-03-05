@@ -10,28 +10,18 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Company extends ValueObject
 {
-    #[ORM\Column(name: "company_name", type: "string", length: 255)]
-    private string $name;
-
-    #[ORM\Column(name: "company_catch_phrase", type: "string", length: 255)]
-    private string $catchPhrase;
-
-    #[ORM\Column(name: "company_bs", type: "string", length: 255)]
-    private string $bs;
 
     public function __construct(
-        string $name,
-        string $catchPhrase,
-        string $bs,
-    )
-    {
+        #[ORM\Column(name: 'company_name', type: 'string', length: 255, nullable: true)]
+        private string $name,
+        #[ORM\Column(name: 'company_catch_phrase', type: 'string', length: 500, nullable: true)]
+        private string $catchPhrase,
+        #[ORM\Column(name: 'company_bs', type: 'string', length: 500, nullable: true)]
+        private string $bs
+    ) {
         Assert::notEmpty($name, 'Nazwa firmy nie może być pusta');
         Assert::notEmpty($catchPhrase, 'Slogan firmy nie może być pusty');
         Assert::notEmpty($bs, 'BS firmy nie może być pusty');
-
-        $this->name = $name;
-        $this->catchPhrase = $catchPhrase;
-        $this->bs = $bs;
     }
 
     public static function fromString(string $name, string $catchPhrase, string $bs): self
@@ -52,12 +42,12 @@ final class Company extends ValueObject
     {
         return $this->name;
     }
-    
+
     public function getCatchPhrase(): string
     {
         return $this->catchPhrase;
     }
-    
+
     public function getBs(): string
     {
         return $this->bs;

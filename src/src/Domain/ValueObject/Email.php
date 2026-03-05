@@ -10,7 +10,7 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Email extends StringValueObject
 {
-    #[ORM\Column(name: "email", type: "string", length: 180)]
+    #[ORM\Column(name: 'email', type: 'string', length: 180)]
     protected string $value;
 
     protected function validate(string $value): void

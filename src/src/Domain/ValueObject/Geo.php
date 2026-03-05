@@ -10,33 +10,28 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Geo extends ValueObject
 {
-    #[ORM\Column(name: "lat", type: "decimal", precision: 10, scale: 8)]
-    private string $lat;
-
-    #[ORM\Column(name: "lng", type: "decimal", precision: 11, scale: 8)]
-    private string $lng;
-
-    public function __construct(string $lat, string $lng)
-    {
+    public function __construct(
+        #[ORM\Column(name: 'lat', type: 'decimal', precision: 10, scale: 8, nullable: true)]
+        private string $lat,
+        #[ORM\Column(name: 'lng', type: 'decimal', precision: 11, scale: 8, nullable: true)]
+        private string $lng
+    ) {
         Assert::notSame($lat, '', 'Szerokość geograficzna (lat) nie może być pusta');
         Assert::notSame($lng, '', 'Długość geograficzna (lng) nie może być pusta');
         Assert::range(
-            (float)$lat, 
-            -90, 
-            90, 
+            (float) $lat,
+            -90,
+            90,
             'Szerokość geograficzna (lat) musi być między %2$s a %3$s. Podano: %s'
         );
         Assert::range(
-            (float)$lng, 
-            -180, 
-            180, 
+            (float) $lng,
+            -180,
+            180,
             'Długość geograficzna (lng) musi być między %2$s a %3$s. Podano: %s'
         );
-
-        $this->lat = $lat;
-        $this->lng = $lng;
     }
-    
+
     public static function fromString(string $lat, string $lng): self
     {
         return new self($lat, $lng);
@@ -46,7 +41,7 @@ final class Geo extends ValueObject
     {
         return $this->lat;
     }
-    
+
     public function getLng(): string
     {
         return $this->lng;
