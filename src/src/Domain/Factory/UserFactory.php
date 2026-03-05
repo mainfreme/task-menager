@@ -13,7 +13,7 @@ use App\Domain\ValueObject\Phone;
 use App\Domain\ValueObject\Username;
 use App\Domain\ValueObject\Website;
 
-final class UserFactory
+final class UserFactory implements UserFactoryInterface
 {
     /**
      * @param array<string, mixed> $data
