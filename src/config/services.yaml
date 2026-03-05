@@ -23,6 +23,7 @@ services:
             - '../src/Domain/Model/'
             - '../src/Domain/ValueObject/'
             - '../src/Domain/Exception/'
+            - '../src/Domain/Factory/UserFactoryInterface.php'
             - '../src/Kernel.php'
 
     # Controllers
@@ -45,6 +46,8 @@ services:
     # Domain Factory
     App\Domain\Factory\:
         resource: '../src/Domain/Factory/'
+        exclude:
+            - '../src/Domain/Factory/UserFactoryInterface.php'
 
     # Configure JsonPlaceholderUserAdapter with API URL from environment
     App\Infrastructure\Adapter\JsonPlaceholderUserAdapter:
@@ -57,4 +60,7 @@ services:
 
     App\Domain\Service\UserApiAdapterInterface:
         alias: App\Infrastructure\Adapter\JsonPlaceholderUserAdapter
+
+    App\Domain\Factory\UserFactoryInterface:
+        alias: App\Domain\Factory\UserFactory
 
