@@ -6,6 +6,7 @@ namespace App\Infrastructure\Adapter;
 
 use App\Domain\Service\UserApiAdapterInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -49,6 +50,12 @@ final class JsonPlaceholderUserAdapter implements UserApiAdapterInterface
         } catch (ClientExceptionInterface|ServerExceptionInterface $e) {
             throw new \RuntimeException(
                 sprintf('HTTP error while fetching users: %s', $e->getMessage()),
+                0,
+                $e
+            );
+        } catch (DecodingExceptionInterface $e) {
+            throw new \RuntimeException(
+                'API response is not an array',
                 0,
                 $e
             );
