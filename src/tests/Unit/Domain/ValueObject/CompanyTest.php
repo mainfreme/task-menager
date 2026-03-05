@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\ValueObject;
 
 use App\Domain\ValueObject\Company;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -13,10 +12,10 @@ use PHPUnit\Framework\TestCase;
 final class CompanyTest extends TestCase
 {
     #[Test]
-    public function creates_valid_company(): void
+    public function createsValidCompany(): void
     {
         $company = Company::fromString('Tech Corp', 'Innovation first', 'synergize solutions');
-        
+
         $this->assertEquals('Tech Corp', $company->getName());
         $this->assertEquals('Innovation first', $company->getCatchPhrase());
         $this->assertEquals('synergize solutions', $company->getBs());
@@ -24,16 +23,16 @@ final class CompanyTest extends TestCase
     }
 
     #[Test]
-    public function creates_company_from_array(): void
+    public function createsCompanyFromArray(): void
     {
         $data = [
             'name' => 'Tech Corp',
             'catchPhrase' => 'Innovation first',
             'bs' => 'synergize solutions',
         ];
-        
+
         $company = Company::fromArray($data);
-        
+
         $this->assertEquals('Tech Corp', $company->getName());
         $this->assertEquals('Innovation first', $company->getCatchPhrase());
         $this->assertEquals('synergize solutions', $company->getBs());
@@ -41,11 +40,11 @@ final class CompanyTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidCompanyProvider')]
-    public function rejects_invalid_company_data(string $name, string $catchPhrase, string $bs, string $expectedMessage): void
+    public function rejectsInvalidCompanyData(string $name, string $catchPhrase, string $bs, string $expectedMessage): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
-        
+
         Company::fromString($name, $catchPhrase, $bs);
     }
 
@@ -59,10 +58,10 @@ final class CompanyTest extends TestCase
     }
 
     #[Test]
-    public function converts_to_array(): void
+    public function convertsToArray(): void
     {
         $company = Company::fromString('Tech Corp', 'Innovation first', 'synergize solutions');
-        
+
         $this->assertEquals([
             'name' => 'Tech Corp',
             'catchPhrase' => 'Innovation first',
@@ -71,20 +70,20 @@ final class CompanyTest extends TestCase
     }
 
     #[Test]
-    public function two_companies_with_same_data_are_equal(): void
+    public function twoCompaniesWithSameDataAreEqual(): void
     {
         $company1 = Company::fromString('Tech Corp', 'Innovation first', 'synergize');
         $company2 = Company::fromString('Tech Corp', 'Innovation first', 'synergize');
-        
+
         $this->assertTrue($company1->equals($company2));
     }
 
     #[Test]
-    public function two_companies_with_different_data_are_not_equal(): void
+    public function twoCompaniesWithDifferentDataAreNotEqual(): void
     {
         $company1 = Company::fromString('Tech Corp', 'Innovation first', 'synergize');
         $company2 = Company::fromString('Other Corp', 'Innovation first', 'synergize');
-        
+
         $this->assertFalse($company1->equals($company2));
     }
 }

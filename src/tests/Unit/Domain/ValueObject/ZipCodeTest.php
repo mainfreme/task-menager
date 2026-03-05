@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\ValueObject;
 
 use App\Domain\ValueObject\ZipCode;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -13,20 +12,20 @@ use PHPUnit\Framework\TestCase;
 final class ZipCodeTest extends TestCase
 {
     #[Test]
-    public function creates_valid_zipcode(): void
+    public function createsValidZipcode(): void
     {
         $zipCode = ZipCode::fromString('0123456789');
-        
+
         $this->assertEquals('0123456789', $zipCode->getValue());
     }
 
     #[Test]
     #[DataProvider('invalidZipCodeProvider')]
-    public function rejects_invalid_zipcodes(string $invalidZipCode, string $expectedMessage): void
+    public function rejectsInvalidZipcodes(string $invalidZipCode, string $expectedMessage): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
-        
+
         ZipCode::fromString($invalidZipCode);
     }
 
@@ -44,20 +43,20 @@ final class ZipCodeTest extends TestCase
     }
 
     #[Test]
-    public function two_zipcodes_with_same_value_are_equal(): void
+    public function twoZipcodesWithSameValueAreEqual(): void
     {
         $zipCode1 = ZipCode::fromString('1234567890');
         $zipCode2 = ZipCode::fromString('1234567890');
-        
+
         $this->assertTrue($zipCode1->equals($zipCode2));
     }
 
     #[Test]
-    public function two_zipcodes_with_different_values_are_not_equal(): void
+    public function twoZipcodesWithDifferentValuesAreNotEqual(): void
     {
         $zipCode1 = ZipCode::fromString('1234567890');
         $zipCode2 = ZipCode::fromString('0987654321');
-        
+
         $this->assertFalse($zipCode1->equals($zipCode2));
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\ValueObject;
 
 use App\Domain\ValueObject\Website;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -14,10 +13,10 @@ final class WebsiteTest extends TestCase
 {
     #[Test]
     #[DataProvider('validWebsiteProvider')]
-    public function creates_valid_website(string $validUrl): void
+    public function createsValidWebsite(string $validUrl): void
     {
         $website = Website::fromString($validUrl);
-        
+
         $this->assertEquals($validUrl, $website->getValue());
     }
 
@@ -36,11 +35,11 @@ final class WebsiteTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidWebsiteProvider')]
-    public function rejects_invalid_websites(string $invalidUrl, string $expectedMessage): void
+    public function rejectsInvalidWebsites(string $invalidUrl, string $expectedMessage): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
-        
+
         Website::fromString($invalidUrl);
     }
 
@@ -56,20 +55,20 @@ final class WebsiteTest extends TestCase
     }
 
     #[Test]
-    public function two_websites_with_same_value_are_equal(): void
+    public function twoWebsitesWithSameValueAreEqual(): void
     {
         $website1 = Website::fromString('https://example.com');
         $website2 = Website::fromString('https://example.com');
-        
+
         $this->assertTrue($website1->equals($website2));
     }
 
     #[Test]
-    public function two_websites_with_different_values_are_not_equal(): void
+    public function twoWebsitesWithDifferentValuesAreNotEqual(): void
     {
         $website1 = Website::fromString('https://example.com');
         $website2 = Website::fromString('https://other.com');
-        
+
         $this->assertFalse($website1->equals($website2));
     }
 }

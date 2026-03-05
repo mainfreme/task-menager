@@ -7,7 +7,6 @@ namespace App\Tests\Unit\Domain\ValueObject;
 use App\Domain\ValueObject\Address;
 use App\Domain\ValueObject\Geo;
 use App\Domain\ValueObject\ZipCode;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 final class AddressTest extends TestCase
 {
     #[Test]
-    public function creates_valid_address(): void
+    public function createsValidAddress(): void
     {
         $address = new Address(
             'Main Street',
@@ -24,7 +23,7 @@ final class AddressTest extends TestCase
             ZipCode::fromString('1234567890'),
             Geo::fromString('40.7128', '-74.0060')
         );
-        
+
         $this->assertEquals('Main Street', $address->getStreet());
         $this->assertEquals('Apt. 123', $address->getSuite());
         $this->assertEquals('New York', $address->getCity());
@@ -32,7 +31,7 @@ final class AddressTest extends TestCase
     }
 
     #[Test]
-    public function creates_address_from_array(): void
+    public function createsAddressFromArray(): void
     {
         $data = [
             'street' => 'Main Street',
@@ -44,9 +43,9 @@ final class AddressTest extends TestCase
                 'lng' => '-74.0060',
             ],
         ];
-        
+
         $address = Address::fromArray($data);
-        
+
         $this->assertEquals('Main Street', $address->getStreet());
         $this->assertEquals('Apt. 123', $address->getSuite());
         $this->assertEquals('New York', $address->getCity());
@@ -54,11 +53,11 @@ final class AddressTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidAddressProvider')]
-    public function rejects_invalid_address_data(string $street, string $suite, string $city, string $expectedMessage): void
+    public function rejectsInvalidAddressData(string $street, string $suite, string $city, string $expectedMessage): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
-        
+
         new Address(
             $street,
             $suite,
@@ -78,7 +77,7 @@ final class AddressTest extends TestCase
     }
 
     #[Test]
-    public function formats_full_address(): void
+    public function formatsFullAddress(): void
     {
         $address = new Address(
             'Main Street',
@@ -87,12 +86,12 @@ final class AddressTest extends TestCase
             ZipCode::fromString('1234567890'),
             Geo::fromString('40.7128', '-74.0060')
         );
-        
+
         $this->assertEquals('Main Street Apt. 123, New York 1234567890', $address->getFullAddress());
     }
 
     #[Test]
-    public function converts_to_array(): void
+    public function convertsToArray(): void
     {
         $address = new Address(
             'Main Street',
@@ -101,9 +100,9 @@ final class AddressTest extends TestCase
             ZipCode::fromString('1234567890'),
             Geo::fromString('40.7128', '-74.0060')
         );
-        
+
         $array = $address->toArray();
-        
+
         $this->assertEquals('Main Street', $array['street']);
         $this->assertEquals('Apt. 123', $array['suite']);
         $this->assertEquals('New York', $array['city']);
@@ -114,7 +113,7 @@ final class AddressTest extends TestCase
     }
 
     #[Test]
-    public function two_addresses_with_same_data_are_equal(): void
+    public function twoAddressesWithSameDataAreEqual(): void
     {
         $address1 = new Address(
             'Main Street',
@@ -123,7 +122,7 @@ final class AddressTest extends TestCase
             ZipCode::fromString('1234567890'),
             Geo::fromString('40.7128', '-74.0060')
         );
-        
+
         $address2 = new Address(
             'Main Street',
             'Apt. 123',
@@ -131,12 +130,12 @@ final class AddressTest extends TestCase
             ZipCode::fromString('1234567890'),
             Geo::fromString('40.7128', '-74.0060')
         );
-        
+
         $this->assertTrue($address1->equals($address2));
     }
 
     #[Test]
-    public function two_addresses_with_different_streets_are_not_equal(): void
+    public function twoAddressesWithDifferentStreetsAreNotEqual(): void
     {
         $address1 = new Address(
             'Main Street',
@@ -145,7 +144,7 @@ final class AddressTest extends TestCase
             ZipCode::fromString('1234567890'),
             Geo::fromString('40.7128', '-74.0060')
         );
-        
+
         $address2 = new Address(
             'Second Street',
             'Apt. 123',
@@ -153,16 +152,16 @@ final class AddressTest extends TestCase
             ZipCode::fromString('1234567890'),
             Geo::fromString('40.7128', '-74.0060')
         );
-        
+
         $this->assertFalse($address1->equals($address2));
     }
 
     #[Test]
-    public function fails_when_nested_zipcode_is_invalid(): void
+    public function failsWhenNestedZipcodeIsInvalid(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Zip code musi mieć dokładnie 10 znaków');
-        
+
         Address::fromArray([
             'street' => 'Main Street',
             'suite' => 'Apt. 123',
@@ -173,11 +172,11 @@ final class AddressTest extends TestCase
     }
 
     #[Test]
-    public function fails_when_nested_geo_is_invalid(): void
+    public function failsWhenNestedGeoIsInvalid(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Szerokość geograficzna (lat) musi być między -90 a 90');
-        
+
         Address::fromArray([
             'street' => 'Main Street',
             'suite' => 'Apt. 123',

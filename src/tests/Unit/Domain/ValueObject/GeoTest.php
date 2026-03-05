@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\ValueObject;
 
 use App\Domain\ValueObject\Geo;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -14,10 +13,10 @@ final class GeoTest extends TestCase
 {
     #[Test]
     #[DataProvider('validGeoProvider')]
-    public function creates_valid_geo_coordinates(string $lat, string $lng): void
+    public function createsValidGeoCoordinates(string $lat, string $lng): void
     {
         $geo = Geo::fromString($lat, $lng);
-        
+
         $this->assertEquals($lat, $geo->getLat());
         $this->assertEquals($lng, $geo->getLng());
         $this->assertEquals("$lat, $lng", $geo->toString());
@@ -39,11 +38,11 @@ final class GeoTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidGeoProvider')]
-    public function rejects_invalid_geo_coordinates(string $lat, string $lng, string $expectedMessage): void
+    public function rejectsInvalidGeoCoordinates(string $lat, string $lng, string $expectedMessage): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
-        
+
         Geo::fromString($lat, $lng);
     }
 
@@ -62,10 +61,10 @@ final class GeoTest extends TestCase
     }
 
     #[Test]
-    public function converts_to_array(): void
+    public function convertsToArray(): void
     {
         $geo = Geo::fromString('52.2297', '21.0122');
-        
+
         $this->assertEquals([
             'lat' => '52.2297',
             'lng' => '21.0122',
@@ -73,20 +72,20 @@ final class GeoTest extends TestCase
     }
 
     #[Test]
-    public function two_geo_with_same_coordinates_are_equal(): void
+    public function twoGeoWithSameCoordinatesAreEqual(): void
     {
         $geo1 = Geo::fromString('52.2297', '21.0122');
         $geo2 = Geo::fromString('52.2297', '21.0122');
-        
+
         $this->assertTrue($geo1->equals($geo2));
     }
 
     #[Test]
-    public function two_geo_with_different_coordinates_are_not_equal(): void
+    public function twoGeoWithDifferentCoordinatesAreNotEqual(): void
     {
         $geo1 = Geo::fromString('52.2297', '21.0122');
         $geo2 = Geo::fromString('51.5074', '-0.1278');
-        
+
         $this->assertFalse($geo1->equals($geo2));
     }
 }

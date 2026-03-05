@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain\ValueObject;
 
 use App\Domain\ValueObject\Email;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -13,21 +12,21 @@ use PHPUnit\Framework\TestCase;
 final class EmailTest extends TestCase
 {
     #[Test]
-    public function creates_valid_email(): void
+    public function createsValidEmail(): void
     {
         $email = Email::fromString('user@example.com');
-        
+
         $this->assertEquals('user@example.com', $email->getValue());
         $this->assertEquals('user@example.com', $email->toString());
     }
 
     #[Test]
     #[DataProvider('invalidEmailProvider')]
-    public function rejects_invalid_emails(string $invalidEmail, string $expectedMessage): void
+    public function rejectsInvalidEmails(string $invalidEmail, string $expectedMessage): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
-        
+
         Email::fromString($invalidEmail);
     }
 
@@ -45,28 +44,28 @@ final class EmailTest extends TestCase
     }
 
     #[Test]
-    public function two_emails_with_same_value_are_equal(): void
+    public function twoEmailsWithSameValueAreEqual(): void
     {
         $email1 = Email::fromString('test@example.com');
         $email2 = Email::fromString('test@example.com');
-        
+
         $this->assertTrue($email1->equals($email2));
     }
 
     #[Test]
-    public function two_emails_with_different_values_are_not_equal(): void
+    public function twoEmailsWithDifferentValuesAreNotEqual(): void
     {
         $email1 = Email::fromString('test1@example.com');
         $email2 = Email::fromString('test2@example.com');
-        
+
         $this->assertFalse($email1->equals($email2));
     }
 
     #[Test]
-    public function casts_to_string(): void
+    public function castsToString(): void
     {
         $email = Email::fromString('user@example.com');
-        
+
         $this->assertEquals('user@example.com', (string) $email);
     }
 }
