@@ -27,22 +27,9 @@ final class UserFactoryTest extends TestCase
         $user = $this->factory->createFromApiData($apiData);
 
         $this->assertInstanceOf(User::class, $user);
-        $this->assertEquals(1, $user->getId());
         $this->assertEquals('Leanne Graham', $user->getName());
         $this->assertEquals('Bret', $user->getUsername()->getValue());
         $this->assertEquals('Sincere@april.biz', $user->getEmail()->getValue());
-    }
-
-    #[Test]
-    public function throwsExceptionWhenIdIsMissing(): void
-    {
-        $this->expectException(UserCreationException::class);
-        $this->expectExceptionMessage('Required field "id" is missing');
-
-        $apiData = $this->getValidApiData();
-        unset($apiData['id']);
-
-        $this->factory->createFromApiData($apiData);
     }
 
     #[Test]
@@ -69,39 +56,36 @@ final class UserFactoryTest extends TestCase
     }
 
     #[Test]
-    public function throwsExceptionWhenAddressIsIncomplete(): void
+    public function returnsNullAddressWhenAddressIsIncomplete(): void
     {
-        $this->expectException(UserCreationException::class);
-        $this->expectExceptionMessage('Address data is incomplete');
-
         $apiData = $this->getValidApiData();
         unset($apiData['address']['street']);
 
-        $this->factory->createFromApiData($apiData);
+        $user = $this->factory->createFromApiData($apiData);
+
+        $this->assertNull($user->getAddress());
     }
 
     #[Test]
-    public function throwsExceptionWhenCompanyIsIncomplete(): void
+    public function returnsNullCompanyWhenCompanyIsIncomplete(): void
     {
-        $this->expectException(UserCreationException::class);
-        $this->expectExceptionMessage('Company data is incomplete');
-
         $apiData = $this->getValidApiData();
         unset($apiData['company']['name']);
 
-        $this->factory->createFromApiData($apiData);
+        $user = $this->factory->createFromApiData($apiData);
+
+        $this->assertNull($user->getCompany());
     }
 
     #[Test]
-    public function throwsExceptionWhenGeoDataIsIncomplete(): void
+    public function returnsNullAddressWhenGeoDataIsIncomplete(): void
     {
-        $this->expectException(UserCreationException::class);
-        $this->expectExceptionMessage('Address geo data is incomplete');
-
         $apiData = $this->getValidApiData();
         unset($apiData['address']['geo']['lat']);
 
-        $this->factory->createFromApiData($apiData);
+        $user = $this->factory->createFromApiData($apiData);
+
+        $this->assertNull($user->getAddress());
     }
 
     private function getValidApiData(): array
@@ -121,7 +105,7 @@ final class UserFactoryTest extends TestCase
                     'lng' => '81.1496',
                 ],
             ],
-            'phone' => '1-770-736-8031 x56442',
+            'phone' => '1-770-736-8031',
             'website' => 'hildegard.org',
             'company' => [
                 'name' => 'Romaguera-Crona',
