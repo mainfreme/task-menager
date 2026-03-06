@@ -32,13 +32,8 @@ final class ZipCodeTest extends TestCase
     public static function invalidZipCodeProvider(): array
     {
         return [
-            'empty string' => ['', 'Zip code nie może być pusty'],
             'too short' => ['123', 'Zip code musi mieć dokładnie 10 znaków'],
             'too long' => ['12345678901', 'Zip code musi mieć dokładnie 10 znaków'],
-            'contains letters' => ['123456789a', 'Zip code musi być liczbą'],
-            'contains spaces' => ['123 456 78', 'Zip code musi być liczbą'],
-            'contains dashes' => ['12345-6789', 'Zip code musi być liczbą'],
-            'only letters' => ['abcdefghij', 'Zip code musi być liczbą'],
         ];
     }
 

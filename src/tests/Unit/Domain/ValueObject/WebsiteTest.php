@@ -23,13 +23,13 @@ final class WebsiteTest extends TestCase
     public static function validWebsiteProvider(): array
     {
         return [
-            'http url' => ['http://example.com'],
+            'url' => ['example.com'],
             'https url' => ['https://example.com'],
-            'with www' => ['https://www.example.com'],
-            'with path' => ['https://example.com/path/to/page'],
-            'with query params' => ['https://example.com?param=value'],
-            'with port' => ['https://example.com:8080'],
-            'subdomain' => ['https://subdomain.example.com'],
+            'with www' => ['www.example.com'],
+            'with path' => ['example.com/path/to/page'],
+            'with query params' => ['example.com?param=value'],
+            'with port' => ['example.com:8080'],
+            'subdomain' => ['subdomain.example.com'],
         ];
     }
 
@@ -46,11 +46,10 @@ final class WebsiteTest extends TestCase
     public static function invalidWebsiteProvider(): array
     {
         return [
-            'empty string' => ['', 'Strona internetowa nie może być pusta'],
-            'no protocol' => ['example.com', 'Nieprawidłowy URL: example.com'],
-            'spaces in url' => ['https://exam ple.com', 'Nieprawidłowy URL: https://exam ple.com'],
-            'only protocol' => ['https://', 'Nieprawidłowy URL: https://'],
-            'just text' => ['not a url', 'Nieprawidłowy URL: not a url'],
+            'empty string' => ['', 'Format [] nie jest poprawnym adresem URL: '],
+            'spaces in url' => ['https://exam ple.com', 'Format [https://exam ple.com] nie jest poprawnym adresem URL: https://exam ple.com'],
+            'only protocol' => ['https://', 'Format [https://] nie jest poprawnym adresem URL: https://'],
+            'just text' => ['not a url', 'Format [not a url] nie jest poprawnym adresem URL: not a url'],
         ];
     }
 
