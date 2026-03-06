@@ -38,4 +38,3 @@ final class Version20260306001000 extends AbstractMigration
         $this->addSql('DROP TABLE tasks');
     }
 }
-
