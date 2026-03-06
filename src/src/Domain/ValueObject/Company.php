@@ -10,14 +10,13 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Company extends ValueObject
 {
-
     public function __construct(
         #[ORM\Column(name: 'company_name', type: 'string', length: 255, nullable: true)]
         private string $name,
         #[ORM\Column(name: 'company_catch_phrase', type: 'string', length: 500, nullable: true)]
         private string $catchPhrase,
         #[ORM\Column(name: 'company_bs', type: 'string', length: 500, nullable: true)]
-        private string $bs
+        private string $bs,
     ) {
         Assert::notEmpty($name, 'Nazwa firmy nie może być pusta');
         Assert::notEmpty($catchPhrase, 'Slogan firmy nie może być pusty');

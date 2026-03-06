@@ -10,7 +10,6 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Address extends ValueObject
 {
-
     public function __construct(
         #[ORM\Column(name: 'street', type: 'string', length: 255, nullable: true)]
         private string $street,
