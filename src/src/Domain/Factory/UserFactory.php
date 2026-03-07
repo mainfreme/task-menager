@@ -113,6 +113,7 @@ final class UserFactory implements UserFactoryInterface
             return null;
         }
 
+        /* @var array{street: string, suite: string, city: string, zipcode: string, geo: array{lat: string, lng: string}} $value */
         return Address::fromArray($value);
     }
 
@@ -129,6 +130,7 @@ final class UserFactory implements UserFactoryInterface
             }
         }
 
+        /* @var array{name: string, catchPhrase: string, bs: string} $value */
         return Company::fromArray($value);
     }
 
