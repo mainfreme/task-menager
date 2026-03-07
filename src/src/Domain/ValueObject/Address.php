@@ -82,17 +82,22 @@ final class Address extends ValueObject
         return $this->getFullAddress();
     }
 
+    /**
+     * @return string
+     * @throws \InvalidArgumentException
+     */
     protected function toComparable(): string
     {
-        return json_encode([
-            'street' => $this->street,
-            'suite' => $this->suite,
-            'city' => $this->city,
-            'zipCode' => $this->zipCode->getValue(),
-            'geo' => $this->geo->toArray(),
-        ]);
+        try {
+            return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException('Failed to encode address to JSON', previous: $e);
+        }
     }
 
+    /**
+     * @return array{street: string, suite: string, city: string, zipcode: string, geo: array{lat: string, lng: string}}
+     */
     public function toArray(): array
     {
         return [

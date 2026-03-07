@@ -60,15 +60,22 @@ final class Company extends ValueObject
         return sprintf('%s - %s', $this->name, $this->catchPhrase);
     }
 
+    /**
+     * @return string
+     * @throws \InvalidArgumentException
+     */
     protected function toComparable(): string
     {
-        return json_encode([
-            'name' => $this->name,
-            'catchPhrase' => $this->catchPhrase,
-            'bs' => $this->bs,
-        ]);
+        try {
+            return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException('Failed to encode company to JSON', previous: $e);
+        }
     }
 
+    /**
+     * @return array{name: string, catchPhrase: string, bs: string}
+     */
     public function toArray(): array
     {
         return [
