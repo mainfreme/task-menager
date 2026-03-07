@@ -14,7 +14,7 @@ final class Geo extends ValueObject
         #[ORM\Column(name: 'lat', type: 'decimal', precision: 10, scale: 8, nullable: true)]
         private string $lat,
         #[ORM\Column(name: 'lng', type: 'decimal', precision: 11, scale: 8, nullable: true)]
-        private string $lng
+        private string $lng,
     ) {
         Assert::notSame($lat, '', 'Szerokość geograficzna (lat) nie może być pusta');
         Assert::notSame($lng, '', 'Długość geograficzna (lng) nie może być pusta');
@@ -57,6 +57,9 @@ final class Geo extends ValueObject
         return sprintf('%s:%s', $this->lat, $this->lng);
     }
 
+    /**
+     * @return array{lat: string, lng: string}
+     */
     public function toArray(): array
     {
         return [

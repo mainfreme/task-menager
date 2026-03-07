@@ -10,14 +10,13 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Company extends ValueObject
 {
-
     public function __construct(
         #[ORM\Column(name: 'company_name', type: 'string', length: 255, nullable: true)]
         private string $name,
         #[ORM\Column(name: 'company_catch_phrase', type: 'string', length: 500, nullable: true)]
         private string $catchPhrase,
         #[ORM\Column(name: 'company_bs', type: 'string', length: 500, nullable: true)]
-        private string $bs
+        private string $bs,
     ) {
         Assert::notEmpty($name, 'Nazwa firmy nie może być pusta');
         Assert::notEmpty($catchPhrase, 'Slogan firmy nie może być pusty');
@@ -29,6 +28,9 @@ final class Company extends ValueObject
         return new self($name, $catchPhrase, $bs);
     }
 
+    /**
+     * @param array{name: string, catchPhrase: string, bs: string} $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -58,15 +60,22 @@ final class Company extends ValueObject
         return sprintf('%s - %s', $this->name, $this->catchPhrase);
     }
 
+    /**
+     * @return string
+     * @throws \InvalidArgumentException
+     */
     protected function toComparable(): string
     {
-        return json_encode([
-            'name' => $this->name,
-            'catchPhrase' => $this->catchPhrase,
-            'bs' => $this->bs,
-        ]);
+        try {
+            return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException('Failed to encode company to JSON', previous: $e);
+        }
     }
 
+    /**
+     * @return array{name: string, catchPhrase: string, bs: string}
+     */
     public function toArray(): array
     {
         return [

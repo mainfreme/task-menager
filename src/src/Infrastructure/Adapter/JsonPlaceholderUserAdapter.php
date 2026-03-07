@@ -34,13 +34,7 @@ final class JsonPlaceholderUserAdapter implements UserApiAdapterInterface
                 );
             }
 
-            $data = $response->toArray();
-
-            if (!is_array($data)) {
-                throw new \RuntimeException('API response is not an array');
-            }
-
-            return $data;
+            return $response->toArray();
         } catch (TransportExceptionInterface $e) {
             throw new \RuntimeException(
                 sprintf('Transport error while fetching users: %s', $e->getMessage()),

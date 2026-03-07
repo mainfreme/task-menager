@@ -10,7 +10,6 @@ use Webmozart\Assert\Assert;
 #[ORM\Embeddable]
 final class Address extends ValueObject
 {
-
     public function __construct(
         #[ORM\Column(name: 'street', type: 'string', length: 255, nullable: true)]
         private string $street,
@@ -28,6 +27,9 @@ final class Address extends ValueObject
         Assert::notEmpty($city, 'Miasto nie może być puste');
     }
 
+    /**
+     * @param array{street: string, suite: string, city: string, zipcode: string, geo: array{lat: string, lng: string}} $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -80,17 +82,22 @@ final class Address extends ValueObject
         return $this->getFullAddress();
     }
 
+    /**
+     * @return string
+     * @throws \InvalidArgumentException
+     */
     protected function toComparable(): string
     {
-        return json_encode([
-            'street' => $this->street,
-            'suite' => $this->suite,
-            'city' => $this->city,
-            'zipCode' => $this->zipCode->getValue(),
-            'geo' => $this->geo->toArray(),
-        ]);
+        try {
+            return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException('Failed to encode address to JSON', previous: $e);
+        }
     }
 
+    /**
+     * @return array{street: string, suite: string, city: string, zipcode: string, geo: array{lat: string, lng: string}}
+     */
     public function toArray(): array
     {
         return [

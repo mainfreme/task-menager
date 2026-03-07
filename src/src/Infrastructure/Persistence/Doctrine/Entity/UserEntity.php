@@ -71,6 +71,11 @@ class UserEntity
         $this->createdAt = $createdAt;
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public static function fromDomain(User $user): self
     {
         return new self(

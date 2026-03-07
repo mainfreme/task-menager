@@ -17,6 +17,9 @@ final class ImportUsersResult
     ) {
     }
 
+    /**
+     * @return array{imported: int, skipped: int, failed: int, errors: array<string>}
+     */
     public function toArray(): array
     {
         return [

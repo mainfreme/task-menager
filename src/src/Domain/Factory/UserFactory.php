@@ -113,6 +113,7 @@ final class UserFactory implements UserFactoryInterface
             return null;
         }
 
+        /** @phpstan-var array{street: string, suite: string, city: string, zipcode: string, geo: array{lat: string, lng: string}} $value */
         return Address::fromArray($value);
     }
 
@@ -129,16 +130,12 @@ final class UserFactory implements UserFactoryInterface
             }
         }
 
+        /** @phpstan-var array{name: string, catchPhrase: string, bs: string} $value */
         return Company::fromArray($value);
     }
 
     private function hashImportPassword(): string
     {
-        $hash = password_hash('secret123', PASSWORD_DEFAULT);
-        if (false === $hash) {
-            throw new UserCreationException('Failed to hash default import password');
-        }
-
-        return $hash;
+        return password_hash('secret123', PASSWORD_DEFAULT);
     }
 }
