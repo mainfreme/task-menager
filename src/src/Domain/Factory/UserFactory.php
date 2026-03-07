@@ -136,11 +136,6 @@ final class UserFactory implements UserFactoryInterface
 
     private function hashImportPassword(): string
     {
-        $hash = password_hash('secret123', PASSWORD_DEFAULT);
-        if (false === $hash) {
-            throw new UserCreationException('Failed to hash default import password');
-        }
-
-        return $hash;
+        return password_hash('secret123', PASSWORD_DEFAULT);
     }
 }
