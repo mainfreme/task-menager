@@ -7,7 +7,7 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Exception\TaskNotFoundException;
 use App\Domain\Exception\TaskPersistenceException;
 use App\Domain\Exception\UserNotFoundException;
-use App\Domain\Model\Task\Task;
+use App\Domain\Model\Task\TaskAggregate;
 use App\Domain\Repository\TaskRepositoryInterface;
 use App\Infrastructure\Persistence\Doctrine\Entity\TaskEntity;
 use App\Infrastructure\Persistence\Doctrine\Entity\UserEntity;
@@ -20,7 +20,7 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
     ) {
     }
 
-    public function get(int $id): Task
+    public function get(int $id): TaskAggregate
     {
         $task = $this->findById($id);
 
@@ -31,7 +31,7 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
         return $task;
     }
 
-    public function findById(int $id): ?Task
+    public function findById(int $id): ?TaskAggregate
     {
         $entity = $this->entityManager->getRepository(TaskEntity::class)->find($id);
 
@@ -39,7 +39,7 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
     }
 
     /**
-     * @return array<Task>
+     * @return array<TaskAggregate>
      */
     public function findByUserId(int $userId): array
     {
@@ -53,25 +53,25 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
             ->getResult();
 
         return array_map(
-            static fn (TaskEntity $entity): Task => $entity->toDomain(),
+            static fn (TaskEntity $entity): TaskAggregate => $entity->toDomain(),
             $entities
         );
     }
 
     /**
-     * @return array<Task>
+     * @return array<TaskAggregate>
      */
     public function findAll(): array
     {
         $entities = $this->entityManager->getRepository(TaskEntity::class)->findAll();
 
         return array_map(
-            static fn (TaskEntity $entity): Task => $entity->toDomain(),
+            static fn (TaskEntity $entity): TaskAggregate => $entity->toDomain(),
             $entities
         );
     }
 
-    public function save(Task $task): void
+    public function save(TaskAggregate $task): void
     {
         try {
             $userEntity = $this->findUserEntityOrFail($task->getAssignedUserId());
@@ -85,7 +85,7 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
         }
     }
 
-    public function update(Task $task): void
+    public function update(TaskAggregate $task): void
     {
         try {
             $taskEntity = $this->entityManager->getRepository(TaskEntity::class)->find($task->getId());

@@ -6,36 +6,36 @@ namespace App\Domain\Repository;
 
 use App\Domain\Exception\TaskNotFoundException;
 use App\Domain\Exception\TaskPersistenceException;
-use App\Domain\Model\Task\Task;
+use App\Domain\Model\Task\TaskAggregate;
 
 interface TaskRepositoryInterface
 {
     /**
      * @throws TaskNotFoundException
      */
-    public function get(int $id): Task;
+    public function get(int $id): TaskAggregate;
 
-    public function findById(int $id): ?Task;
+    public function findById(int $id): ?TaskAggregate;
 
     /**
-     * @return array<Task>
+     * @return array<TaskAggregate>
      */
     public function findByUserId(int $userId): array;
 
     /**
-     * @return array<Task>
+     * @return array<TaskAggregate>
      */
     public function findAll(): array;
 
     /**
      * @throws TaskPersistenceException
      */
-    public function save(Task $task): void;
+    public function save(TaskAggregate $task): void;
 
     /**
      * @throws TaskPersistenceException
      */
-    public function update(Task $task): void;
+    public function update(TaskAggregate $task): void;
 
     /**
      * @throws TaskNotFoundException
