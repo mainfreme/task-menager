@@ -10,6 +10,9 @@ use App\Domain\ValueObject\Username;
 
 interface UserRepositoryInterface
 {
+    /**
+     * @return array<User>
+     */
     public function findAll(): array;
 
     public function findById(int $id): ?User;

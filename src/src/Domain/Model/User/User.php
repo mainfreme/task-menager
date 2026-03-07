@@ -157,6 +157,9 @@ final class User
         return $this->createdAt;
     }
 
+    /**
+     * @return array{id: ?int, name: string, username: Username, email: Email, address: ?Address, phone: ?Phone, website: ?Website, company: ?Company, passwordHash: string}
+     */
     public function toArray(): array
     {
         return [

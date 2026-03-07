@@ -28,6 +28,9 @@ final class Company extends ValueObject
         return new self($name, $catchPhrase, $bs);
     }
 
+    /**
+     * @param array{name: string, catchPhrase: string, bs: string} $data
+     */
     public static function fromArray(array $data): self
     {
         return new self(

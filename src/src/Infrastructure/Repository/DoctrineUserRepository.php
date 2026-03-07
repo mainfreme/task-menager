@@ -18,6 +18,9 @@ final class DoctrineUserRepository implements UserRepositoryInterface
     ) {
     }
 
+    /**
+     * @return array<User>
+     */
     public function findAll(): array
     {
         $entities = $this->entityManager->getRepository(UserEntity::class)->findAll();

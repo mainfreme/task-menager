@@ -57,6 +57,9 @@ final class Geo extends ValueObject
         return sprintf('%s:%s', $this->lat, $this->lng);
     }
 
+    /**
+     * @return array{lat: string, lng: string}
+     */
     public function toArray(): array
     {
         return [

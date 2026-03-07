@@ -17,6 +17,9 @@ abstract class ValueObject implements ValueObjectInterface
 
     abstract public function toString(): string;
 
+    /**
+     * @return string|array<string, mixed>
+     */
     abstract protected function toComparable(): string|array;
 
     public function __toString(): string
