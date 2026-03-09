@@ -98,7 +98,11 @@ class UserEntity implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        return ['ROLE_USER', 'ROLE_ADMIN'];
+        if ('admin' === $this->username->getValue()) {
+            return ['ROLE_USER', 'ROLE_ADMIN'];
+        }
+
+        return ['ROLE_USER'];
     }
 
     public function eraseCredentials(): void
