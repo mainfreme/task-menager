@@ -23,6 +23,7 @@ class TaskEventEntity
     #[ORM\Column(name: 'event_type', type: 'string', length: 50)]
     private string $eventType;
 
+    /** @var array<string, mixed> */
     #[ORM\Column(type: 'json')]
     private array $payload;
 
@@ -33,6 +34,9 @@ class TaskEventEntity
     #[ORM\Column(name: 'occurred_at', type: 'datetime_immutable')]
     private \DateTimeImmutable $occurredAt;
 
+    /**
+     * @param array<string, mixed> $payload
+     */
     public function __construct(
         TaskEntity $task,
         TaskEventType $eventType,
@@ -62,6 +66,9 @@ class TaskEventEntity
         return $this->eventType;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getPayload(): array
     {
         return $this->payload;
