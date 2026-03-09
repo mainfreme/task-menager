@@ -1,0 +1,12 @@
+ImportUsersResult:
+    type: object
+    config:
+        fields:
+            imported:
+                type: "Int!"
+            skipped:
+                type: "Int!"
+            failed:
+                type: "Int!"
+            errors:
+                type: "[String!]!"
