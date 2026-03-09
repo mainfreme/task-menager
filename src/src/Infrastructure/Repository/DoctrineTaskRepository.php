@@ -111,7 +111,11 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
                 throw TaskNotFoundException::withId($task->getId());
             }
 
-            $taskEntity->updateFromDomain($task);
+            $assignedUser = $taskEntity->getAssignedUser()->getId() !== $task->getAssignedUserId()
+                ? $this->findUserEntityOrFail($task->getAssignedUserId())
+                : null;
+
+            $taskEntity->updateFromDomain($task, $assignedUser);
         } catch (TaskNotFoundException $e) {
             throw $e;
         } catch (\Throwable $e) {
