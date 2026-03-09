@@ -1,0 +1,10 @@
+AuthPayload:
+    type: object
+    config:
+        fields:
+            token:
+                type: "String!"
+            refreshToken:
+                type: "String!"
+            expiresAt:
+                type: "String!"
