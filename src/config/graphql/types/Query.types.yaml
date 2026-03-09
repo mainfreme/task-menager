@@ -4,16 +4,27 @@ Query:
         fields:
             task:
                 type: "Task"
+                access: "@=isAuthenticated()"
                 args:
                     id:
                         type: "Int!"
                 resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskQueryResolver').findById(args['id'])"
             tasks:
                 type: "[Task!]!"
+                access: "@=isAuthenticated()"
                 resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskQueryResolver').findAll()"
             tasksByUser:
                 type: "[Task!]!"
+                access: "@=isAuthenticated()"
                 args:
                     userId:
                         type: "Int!"
                 resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskQueryResolver').findByUserId(args['userId'])"
+            me:
+                type: "User"
+                access: "@=isAuthenticated()"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\UserQueryResolver').me()"
+            users:
+                type: "[User!]!"
+                access: "@=isAuthenticated()"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\UserQueryResolver').findAll()"
