@@ -1,0 +1,16 @@
+TaskEvent:
+    type: object
+    config:
+        fields:
+            id:
+                type: "Int!"
+            taskId:
+                type: "Int!"
+            eventType:
+                type: "String!"
+            payload:
+                type: "String!"
+            userId:
+                type: "Int!"
+            occurredAt:
+                type: "String!"
