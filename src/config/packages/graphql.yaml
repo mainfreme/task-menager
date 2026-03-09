@@ -23,3 +23,5 @@ overblog_graphql:
                 - App\Domain\Exception\TaskPersistenceException
                 - App\Domain\Exception\TaskValidationException
                 - App\Domain\Exception\UserNotFoundException
+                - App\Domain\Exception\InvalidCredentialsException
+                - App\Domain\Exception\InvalidRefreshTokenException
