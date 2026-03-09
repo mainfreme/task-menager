@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Entity;
 
-use App\Domain\Model\User\User;
+use App\Domain\Model\User\UserAggregate;
 use App\Domain\ValueObject\Address;
 use App\Domain\ValueObject\Company;
 use App\Domain\ValueObject\Email;
@@ -12,10 +12,12 @@ use App\Domain\ValueObject\Phone;
 use App\Domain\ValueObject\Username;
 use App\Domain\ValueObject\Website;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'users')]
-class UserEntity
+class UserEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -76,7 +78,34 @@ class UserEntity
         return $this->id;
     }
 
-    public static function fromDomain(User $user): self
+    public function getUserIdentifier(): string
+    {
+        $identifier = $this->email->getValue();
+        if ('' === $identifier) {
+            throw new \LogicException('User email cannot be empty');
+        }
+
+        return $identifier;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRoles(): array
+    {
+        return ['ROLE_USER', 'ROLE_ADMIN'];
+    }
+
+    public function eraseCredentials(): void
+    {
+    }
+
+    public static function fromDomain(UserAggregate $user): self
     {
         return new self(
             name: $user->getName(),
@@ -91,13 +120,13 @@ class UserEntity
         );
     }
 
-    public function toDomain(): User
+    public function toDomain(): UserAggregate
     {
         if (null === $this->id) {
             throw new \LogicException('Cannot map UserEntity without id to domain.');
         }
 
-        return User::reconstitute(
+        return UserAggregate::reconstitute(
             id: $this->id,
             name: $this->name,
             username: $this->username,
