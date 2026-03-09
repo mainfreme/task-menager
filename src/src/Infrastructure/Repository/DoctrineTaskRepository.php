@@ -85,6 +85,23 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
         }
     }
 
+    public function saveAndReturn(TaskAggregate $task): TaskAggregate
+    {
+        try {
+            $userEntity = $this->findUserEntityOrFail($task->getAssignedUserId());
+            $taskEntity = TaskEntity::fromDomain($task, $userEntity);
+
+            $this->entityManager->persist($taskEntity);
+            $this->entityManager->flush();
+
+            return $taskEntity->toDomain();
+        } catch (UserNotFoundException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            throw TaskPersistenceException::onSave($e);
+        }
+    }
+
     public function update(TaskAggregate $task): void
     {
         try {
