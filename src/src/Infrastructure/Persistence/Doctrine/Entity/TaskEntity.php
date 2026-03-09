@@ -65,12 +65,16 @@ class TaskEntity
         );
     }
 
-    public function updateFromDomain(TaskAggregate $task): void
+    public function updateFromDomain(TaskAggregate $task, ?UserEntity $assignedUser = null): void
     {
         $this->name = $task->getName();
         $this->description = $task->getDescription();
         $this->status = $task->getStatus();
         $this->updatedAt = $task->getUpdatedAt();
+
+        if (null !== $assignedUser) {
+            $this->assignedUser = $assignedUser;
+        }
     }
 
     public function toDomain(): TaskAggregate
