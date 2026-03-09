@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Model\Task;
 
+use App\Application\DTO\UpdateTaskDto;
 use App\Domain\Exception\InvalidStatusTransitionException;
 use App\Domain\Model\Enum\TaskStatusEnum;
 use App\Domain\Model\Task\Strategy\StatusTransitionResolverInterface;
@@ -14,7 +15,7 @@ final class TaskAggregate
     private array $recordedEvents = [];
 
     private function __construct(
-        private int $id,
+        private ?int $id,
         private string $name,
         private ?string $description,
         private TaskStatusEnum $status,
@@ -25,7 +26,6 @@ final class TaskAggregate
     }
 
     public static function create(
-        int $id,
         string $name,
         ?string $description,
         int $assignedUserId,
@@ -33,7 +33,7 @@ final class TaskAggregate
         $now = new \DateTimeImmutable();
 
         return new self(
-            id: $id,
+            id: null,
             name: $name,
             description: $description,
             status: TaskStatusEnum::ToDo,
@@ -81,6 +81,16 @@ final class TaskAggregate
         }
 
         $this->status = $newStatus;
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function update(UpdateTaskDto $dto): void
+    {
+        $this->name = $dto->name;
+        $this->description = $dto->description;
+        if (null !== $dto->assignedUserId) {
+            $this->assignedUserId = $dto->assignedUserId;
+        }
         $this->updatedAt = new \DateTimeImmutable();
     }
 

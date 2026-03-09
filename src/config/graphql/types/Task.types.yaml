@@ -1,0 +1,18 @@
+Task:
+    type: object
+    config:
+        fields:
+            id:
+                type: "Int!"
+            name:
+                type: "String!"
+            description:
+                type: "String"
+            status:
+                type: "TaskStatus!"
+            assignedUserId:
+                type: "Int!"
+            createdAt:
+                type: "String!"
+            updatedAt:
+                type: "String!"

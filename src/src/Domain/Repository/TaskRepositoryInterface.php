@@ -35,6 +35,11 @@ interface TaskRepositoryInterface
     /**
      * @throws TaskPersistenceException
      */
+    public function saveAndReturn(TaskAggregate $task): TaskAggregate;
+
+    /**
+     * @throws TaskPersistenceException
+     */
     public function update(TaskAggregate $task): void;
 
     /**

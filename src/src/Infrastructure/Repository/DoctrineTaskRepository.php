@@ -85,6 +85,23 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
         }
     }
 
+    public function saveAndReturn(TaskAggregate $task): TaskAggregate
+    {
+        try {
+            $userEntity = $this->findUserEntityOrFail($task->getAssignedUserId());
+            $taskEntity = TaskEntity::fromDomain($task, $userEntity);
+
+            $this->entityManager->persist($taskEntity);
+            $this->entityManager->flush();
+
+            return $taskEntity->toDomain();
+        } catch (UserNotFoundException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            throw TaskPersistenceException::onSave($e);
+        }
+    }
+
     public function update(TaskAggregate $task): void
     {
         try {
@@ -94,7 +111,11 @@ final class DoctrineTaskRepository implements TaskRepositoryInterface
                 throw TaskNotFoundException::withId($task->getId());
             }
 
-            $taskEntity->updateFromDomain($task);
+            $assignedUser = $taskEntity->getAssignedUser()->getId() !== $task->getAssignedUserId()
+                ? $this->findUserEntityOrFail($task->getAssignedUserId())
+                : null;
+
+            $taskEntity->updateFromDomain($task, $assignedUser);
         } catch (TaskNotFoundException $e) {
             throw $e;
         } catch (\Throwable $e) {

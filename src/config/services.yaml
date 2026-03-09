@@ -31,6 +31,16 @@ services:
         resource: '../src/UI/Http/Controller/'
         tags: ['controller.service_arguments']
 
+    # GraphQL Resolvers
+    App\UI\GraphQL\Resolver\:
+        resource: '../src/UI/GraphQL/Resolver/'
+        public: true
+
+    # GraphQL Error Listener
+    App\UI\GraphQL\EventListener\GraphQLErrorFormatterListener:
+        tags:
+            - { name: kernel.event_listener, event: graphql.error_formatting, method: onErrorFormatting }
+
     # Application Layer (Command Handlers, Query Handlers)
     App\Application\:
         resource: '../src/Application/'
@@ -63,4 +73,22 @@ services:
 
     App\Domain\Factory\UserFactoryInterface:
         alias: App\Domain\Factory\UserFactory
+
+    App\Domain\Repository\TaskRepositoryInterface:
+        alias: App\Infrastructure\Repository\DoctrineTaskRepository
+
+    # Task status transition strategies
+    App\Domain\Model\Task\Strategy\ToDoTransitionStrategy: ~
+    App\Domain\Model\Task\Strategy\InProgressTransitionStrategy: ~
+    App\Domain\Model\Task\Strategy\DoneTransitionStrategy: ~
+
+    App\Domain\Model\Task\Strategy\StatusTransitionResolver:
+        arguments:
+            $strategies:
+                - '@App\Domain\Model\Task\Strategy\ToDoTransitionStrategy'
+                - '@App\Domain\Model\Task\Strategy\InProgressTransitionStrategy'
+                - '@App\Domain\Model\Task\Strategy\DoneTransitionStrategy'
+
+    App\Domain\Model\Task\Strategy\StatusTransitionResolverInterface:
+        alias: App\Domain\Model\Task\Strategy\StatusTransitionResolver
 
