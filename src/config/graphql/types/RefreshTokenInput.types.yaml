@@ -1,0 +1,6 @@
+RefreshTokenInput:
+    type: input-object
+    config:
+        fields:
+            refreshToken:
+                type: "String!"
