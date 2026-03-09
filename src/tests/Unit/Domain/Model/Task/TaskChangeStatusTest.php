@@ -80,7 +80,7 @@ final class TaskChangeStatusTest extends TestCase
     #[Test]
     public function supportsFullLifecycleTransition(): void
     {
-        $task = TaskAggregate::create(1, 'Lifecycle task', null, 10);
+        $task = TaskAggregate::create('Lifecycle task', null, 10);
         $this->assertSame(TaskStatusEnum::ToDo, $task->getStatus());
 
         $task->changeStatus(TaskStatusEnum::InProgress, $this->resolver);
