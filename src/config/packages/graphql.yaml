@@ -2,6 +2,7 @@ overblog_graphql:
     definitions:
         schema:
             query: Query
+            mutation: Mutation
         mappings:
             auto_discover: true
             types:
@@ -9,3 +10,16 @@ overblog_graphql:
                     type: yaml
                     dir: "%kernel.project_dir%/config/graphql/types"
                     suffix: ~
+    errors_handler:
+        enabled: true
+        internal_error_message: "An internal error occurred."
+        rethrow_internal_exceptions: false
+        debug: false
+        map_exceptions_to_parent: true
+        exceptions:
+            warnings:
+                - App\Domain\Exception\InvalidStatusTransitionException
+                - App\Domain\Exception\TaskNotFoundException
+                - App\Domain\Exception\TaskPersistenceException
+                - App\Domain\Exception\TaskValidationException
+                - App\Domain\Exception\UserNotFoundException
