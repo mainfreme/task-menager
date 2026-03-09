@@ -67,19 +67,19 @@ final class TransitionStrategyTest extends TestCase
         $done = new DoneTransitionStrategy();
 
         // --- ToDo ---
-        yield 'ToDo -> ToDo'       => [$toDo, TaskStatusEnum::ToDo, false];
-        yield 'ToDo -> InProgress'  => [$toDo, TaskStatusEnum::InProgress, true];
-        yield 'ToDo -> Done'        => [$toDo, TaskStatusEnum::Done, false];
+        yield 'ToDo -> ToDo' => [$toDo, TaskStatusEnum::ToDo, false];
+        yield 'ToDo -> InProgress' => [$toDo, TaskStatusEnum::InProgress, true];
+        yield 'ToDo -> Done' => [$toDo, TaskStatusEnum::Done, false];
 
         // --- InProgress ---
-        yield 'InProgress -> ToDo'       => [$inProgress, TaskStatusEnum::ToDo, true];
-        yield 'InProgress -> InProgress'  => [$inProgress, TaskStatusEnum::InProgress, false];
-        yield 'InProgress -> Done'        => [$inProgress, TaskStatusEnum::Done, true];
+        yield 'InProgress -> ToDo' => [$inProgress, TaskStatusEnum::ToDo, true];
+        yield 'InProgress -> InProgress' => [$inProgress, TaskStatusEnum::InProgress, false];
+        yield 'InProgress -> Done' => [$inProgress, TaskStatusEnum::Done, true];
 
         // --- Done ---
-        yield 'Done -> ToDo'       => [$done, TaskStatusEnum::ToDo, true];
-        yield 'Done -> InProgress'  => [$done, TaskStatusEnum::InProgress, false];
-        yield 'Done -> Done'        => [$done, TaskStatusEnum::Done, false];
+        yield 'Done -> ToDo' => [$done, TaskStatusEnum::ToDo, true];
+        yield 'Done -> InProgress' => [$done, TaskStatusEnum::InProgress, false];
+        yield 'Done -> Done' => [$done, TaskStatusEnum::Done, false];
     }
 
     // ------------------------------------------------------------------

@@ -21,7 +21,7 @@ final class TaskInputValidator
         $this->validateDescription($input['description'] ?? null, $violations);
         $this->validateAssignedUserId($input['assignedUserId'] ?? null, $violations, required: true);
 
-        if ($violations !== []) {
+        if ([] !== $violations) {
             throw new TaskValidationException($violations);
         }
     }
@@ -42,7 +42,7 @@ final class TaskInputValidator
             $this->validateAssignedUserId($input['assignedUserId'], $violations, required: false);
         }
 
-        if ($violations !== []) {
+        if ([] !== $violations) {
             throw new TaskValidationException($violations);
         }
     }

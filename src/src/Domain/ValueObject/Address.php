@@ -83,7 +83,6 @@ final class Address extends ValueObject
     }
 
     /**
-     * @return string
      * @throws \InvalidArgumentException
      */
     protected function toComparable(): string
