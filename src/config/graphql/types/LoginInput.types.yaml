@@ -1,0 +1,8 @@
+LoginInput:
+    type: input-object
+    config:
+        fields:
+            email:
+                type: "String!"
+            password:
+                type: "String!"
