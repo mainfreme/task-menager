@@ -61,7 +61,6 @@ final class Company extends ValueObject
     }
 
     /**
-     * @return string
      * @throws \InvalidArgumentException
      */
     protected function toComparable(): string

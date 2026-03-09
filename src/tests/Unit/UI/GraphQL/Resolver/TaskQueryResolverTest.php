@@ -16,20 +16,26 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class TaskQueryResolverTest extends TestCase
 {
     private MockObject&TaskRepositoryInterface $taskRepository;
+    private MockObject&MessageBusInterface $messageBus;
     private MockObject&Security $security;
     private TaskQueryResolver $resolver;
 
     protected function setUp(): void
     {
         $this->taskRepository = $this->createMock(TaskRepositoryInterface::class);
+        $this->messageBus = $this->createMock(MessageBusInterface::class);
+        $this->messageBus->method('dispatch')->willReturn(new Envelope(new \stdClass()));
         $this->security = $this->createMock(Security::class);
 
         $this->resolver = new TaskQueryResolver(
             $this->taskRepository,
+            $this->messageBus,
             $this->security,
         );
     }

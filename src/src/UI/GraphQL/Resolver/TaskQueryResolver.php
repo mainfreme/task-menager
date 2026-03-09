@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace App\UI\GraphQL\Resolver;
 
+use App\Application\Message\TaskEventRecordedMessage;
+use App\Domain\Model\Task\Event\TaskEventType;
 use App\Domain\Model\Task\TaskAggregate;
 use App\Domain\Repository\TaskRepositoryInterface;
 use App\Infrastructure\Persistence\Doctrine\Entity\UserEntity;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class TaskQueryResolver
 {
     public function __construct(
         private readonly TaskRepositoryInterface $taskRepository,
+        private readonly MessageBusInterface $messageBus,
         private readonly Security $security,
     ) {
     }
@@ -32,7 +36,16 @@ final class TaskQueryResolver
             return null;
         }
 
-        return $this->toGraphQL($task);
+        $result = $this->toGraphQL($task);
+
+        $this->messageBus->dispatch(new TaskEventRecordedMessage(
+            taskId: $task->getId(),
+            eventType: TaskEventType::Viewed,
+            payload: ['task' => $result],
+            userId: $this->getCurrentUserId(),
+        ));
+
+        return $result;
     }
 
     /**

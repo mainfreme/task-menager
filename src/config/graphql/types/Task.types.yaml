@@ -16,3 +16,6 @@ Task:
                 type: "String!"
             updatedAt:
                 type: "String!"
+            events:
+                type: "[TaskEvent!]!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskEventResolver').findByTaskId(value['id'])"

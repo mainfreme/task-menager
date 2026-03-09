@@ -120,14 +120,14 @@ final class StatusTransitionResolverTest extends TestCase
     public static function resolveAndTransitionProvider(): iterable
     {
         // allowed
-        yield 'ToDo -> InProgress (allowed)'       => [TaskStatusEnum::ToDo, TaskStatusEnum::InProgress, true];
-        yield 'InProgress -> ToDo (allowed)'        => [TaskStatusEnum::InProgress, TaskStatusEnum::ToDo, true];
-        yield 'InProgress -> Done (allowed)'        => [TaskStatusEnum::InProgress, TaskStatusEnum::Done, true];
-        yield 'Done -> ToDo (allowed)'              => [TaskStatusEnum::Done, TaskStatusEnum::ToDo, true];
+        yield 'ToDo -> InProgress (allowed)' => [TaskStatusEnum::ToDo, TaskStatusEnum::InProgress, true];
+        yield 'InProgress -> ToDo (allowed)' => [TaskStatusEnum::InProgress, TaskStatusEnum::ToDo, true];
+        yield 'InProgress -> Done (allowed)' => [TaskStatusEnum::InProgress, TaskStatusEnum::Done, true];
+        yield 'Done -> ToDo (allowed)' => [TaskStatusEnum::Done, TaskStatusEnum::ToDo, true];
 
         // forbidden
-        yield 'ToDo -> Done (forbidden)'            => [TaskStatusEnum::ToDo, TaskStatusEnum::Done, false];
-        yield 'Done -> InProgress (forbidden)'      => [TaskStatusEnum::Done, TaskStatusEnum::InProgress, false];
+        yield 'ToDo -> Done (forbidden)' => [TaskStatusEnum::ToDo, TaskStatusEnum::Done, false];
+        yield 'Done -> InProgress (forbidden)' => [TaskStatusEnum::Done, TaskStatusEnum::InProgress, false];
     }
 
     #[Test]
