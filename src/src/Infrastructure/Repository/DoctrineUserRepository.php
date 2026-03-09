@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Model\User\User;
+use App\Domain\Model\User\UserAggregate;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\Username;
@@ -19,26 +19,26 @@ final class DoctrineUserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return array<User>
+     * @return array<UserAggregate>
      */
     public function findAll(): array
     {
         $entities = $this->entityManager->getRepository(UserEntity::class)->findAll();
 
         return array_map(
-            static fn (UserEntity $entity): User => $entity->toDomain(),
+            static fn (UserEntity $entity): UserAggregate => $entity->toDomain(),
             $entities
         );
     }
 
-    public function findById(int $id): ?User
+    public function findById(int $id): ?UserAggregate
     {
         $entity = $this->entityManager->getRepository(UserEntity::class)->find($id);
 
         return $entity?->toDomain();
     }
 
-    public function findByUsername(Username $username): ?User
+    public function findByUsername(Username $username): ?UserAggregate
     {
         $entity = $this->entityManager->createQueryBuilder()
             ->select('u')
@@ -51,7 +51,7 @@ final class DoctrineUserRepository implements UserRepositoryInterface
         return $entity?->toDomain();
     }
 
-    public function findByEmail(Email $email): ?User
+    public function findByEmail(Email $email): ?UserAggregate
     {
         $entity = $this->entityManager->createQueryBuilder()
             ->select('u')
@@ -64,7 +64,7 @@ final class DoctrineUserRepository implements UserRepositoryInterface
         return $entity?->toDomain();
     }
 
-    public function save(User $user): void
+    public function save(UserAggregate $user): void
     {
         $this->entityManager->persist(UserEntity::fromDomain($user));
     }
