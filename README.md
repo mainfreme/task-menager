@@ -110,7 +110,32 @@ mutation {
 
 ### `syncUsersFromApi` – import użytkowników z API (wymaga tokena)
 
-Bez argumentów.
+Pobiera użytkowników z zewnętrznego API [JSONPlaceholder](https://jsonplaceholder.typicode.com/users) i zapisuje ich w lokalnej bazie. Użytkownicy z istniejącym adresem email są pomijani. Wszyscy zaimportowani użytkownicy otrzymują domyślne hasło `secret123`.
+
+**Wymagania:** nagłówek `Authorization: Bearer <token>`
+
+**Argumenty:** brak
+
+**Zwracany typ:** `ImportUsersResult`
+
+| Pole | Typ | Opis |
+|------|-----|------|
+| imported | Int! | Liczba zaimportowanych użytkowników |
+| skipped | Int! | Liczba pominiętych (już istnieją w bazie) |
+| failed | Int! | Liczba nieudanych importów |
+| errors | [String!]! | Lista komunikatów błędów |
+
+**Przykład:**
+```graphql
+mutation {
+  syncUsersFromApi {
+    imported
+    skipped
+    failed
+    errors
+  }
+}
+```
 
 ---
 
