@@ -77,6 +77,9 @@ services:
     App\Domain\Repository\TaskRepositoryInterface:
         alias: App\Infrastructure\Repository\DoctrineTaskRepository
 
+    App\Domain\Repository\RefreshTokenRepositoryInterface:
+        alias: App\Infrastructure\Repository\DoctrineRefreshTokenRepository
+
     # Task status transition strategies
     App\Domain\Model\Task\Strategy\ToDoTransitionStrategy: ~
     App\Domain\Model\Task\Strategy\InProgressTransitionStrategy: ~
