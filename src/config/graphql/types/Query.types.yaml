@@ -2,6 +2,18 @@ Query:
     type: object
     config:
         fields:
-            hello:
-                type: "String!"
-                resolve: "@='Hello, GraphQL!'"
+            task:
+                type: "Task"
+                args:
+                    id:
+                        type: "Int!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskQueryResolver').findById(args['id'])"
+            tasks:
+                type: "[Task!]!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskQueryResolver').findAll()"
+            tasksByUser:
+                type: "[Task!]!"
+                args:
+                    userId:
+                        type: "Int!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskQueryResolver').findByUserId(args['userId'])"
