@@ -1,0 +1,32 @@
+Mutation:
+    type: object
+    config:
+        fields:
+            createTask:
+                type: "Task!"
+                args:
+                    input:
+                        type: "CreateTaskInput!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskMutationResolver').createTask(args['input'])"
+            updateTask:
+                type: "Task!"
+                args:
+                    id:
+                        type: "Int!"
+                    input:
+                        type: "UpdateTaskInput!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskMutationResolver').updateTask(args['id'], args['input'])"
+            changeTaskStatus:
+                type: "Task!"
+                args:
+                    id:
+                        type: "Int!"
+                    status:
+                        type: "TaskStatus!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskMutationResolver').changeTaskStatus(args['id'], args['status'])"
+            deleteTask:
+                type: "Boolean!"
+                args:
+                    id:
+                        type: "Int!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskMutationResolver').deleteTask(args['id'])"
