@@ -5,18 +5,25 @@ declare(strict_types=1);
 namespace App\UI\GraphQL\Resolver;
 
 use App\Application\DTO\UpdateTaskDto;
+use App\Application\Message\TaskEventRecordedMessage;
 use App\Application\Validator\TaskInputValidator;
 use App\Domain\Model\Enum\TaskStatusEnum;
+use App\Domain\Model\Task\Event\TaskDomainEventInterface;
 use App\Domain\Model\Task\Strategy\StatusTransitionResolverInterface;
 use App\Domain\Model\Task\TaskAggregate;
 use App\Domain\Repository\TaskRepositoryInterface;
+use App\Infrastructure\Persistence\Doctrine\Entity\UserEntity;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class TaskMutationResolver
 {
     public function __construct(
         private readonly TaskRepositoryInterface $taskRepository,
+        private readonly MessageBusInterface $messageBus,
         private readonly StatusTransitionResolverInterface $statusTransitionResolver,
         private readonly TaskInputValidator $validator,
+        private readonly Security $security,
     ) {
     }
 
@@ -35,7 +42,9 @@ final class TaskMutationResolver
             assignedUserId: $input['assignedUserId'],
         );
 
+        $recordedEvents = $task->pullRecordedEvents();
         $task = $this->taskRepository->saveAndReturn($task);
+        $this->persistRecordedEventsWithTaskId($task->getId(), $recordedEvents);
 
         return $this->toGraphQL($task);
     }
@@ -62,6 +71,8 @@ final class TaskMutationResolver
         $this->taskRepository->update($task);
         $this->taskRepository->flush();
 
+        $this->persistRecordedEvents($task);
+
         return $this->toGraphQL($task);
     }
 
@@ -78,6 +89,8 @@ final class TaskMutationResolver
         $this->taskRepository->update($task);
         $this->taskRepository->flush();
 
+        $this->persistRecordedEvents($task);
+
         return $this->toGraphQL($task);
     }
 
@@ -87,6 +100,42 @@ final class TaskMutationResolver
         $this->taskRepository->flush();
 
         return true;
+    }
+
+    private function persistRecordedEvents(TaskAggregate $task): void
+    {
+        $this->persistRecordedEventsWithTaskId($task->getId(), $task->pullRecordedEvents());
+    }
+
+    /**
+     * @param TaskDomainEventInterface[] $events
+     */
+    /**
+     * @param TaskDomainEventInterface[] $events
+     */
+    private function persistRecordedEventsWithTaskId(int $taskId, array $events): void
+    {
+        $userId = $this->getCurrentUserId();
+
+        foreach ($events as $event) {
+            $this->messageBus->dispatch(new TaskEventRecordedMessage(
+                taskId: $taskId,
+                eventType: $event->eventType(),
+                payload: $event->toPayload(),
+                userId: $userId,
+            ));
+        }
+    }
+
+    private function getCurrentUserId(): int
+    {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof UserEntity || null === $user->getId()) {
+            throw new \LogicException('Authenticated user must have an ID.');
+        }
+
+        return $user->getId();
     }
 
     /**
