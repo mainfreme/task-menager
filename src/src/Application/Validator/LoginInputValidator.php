@@ -21,7 +21,7 @@ final class LoginInputValidator
         $this->validateEmail($input['email'] ?? '', $violations);
         $this->validatePassword($input['password'] ?? '', $violations);
 
-        if (!empty($violations)) {
+        if ($violations !== []) {
             throw new TaskValidationException($violations);
         }
     }
