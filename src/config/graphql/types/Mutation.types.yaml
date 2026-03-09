@@ -2,14 +2,32 @@ Mutation:
     type: object
     config:
         fields:
+            login:
+                type: "AuthPayload!"
+                args:
+                    input:
+                        type: "LoginInput!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\UserMutationResolver').login(args['input'])"
+            refreshToken:
+                type: "AuthPayload!"
+                args:
+                    input:
+                        type: "RefreshTokenInput!"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\UserMutationResolver').refreshToken(args['input'])"
+            syncUsersFromApi:
+                type: "ImportUsersResult!"
+                access: "@=isAuthenticated()"
+                resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\UserMutationResolver').syncUsersFromApi()"
             createTask:
                 type: "Task!"
+                access: "@=isAuthenticated()"
                 args:
                     input:
                         type: "CreateTaskInput!"
                 resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskMutationResolver').createTask(args['input'])"
             updateTask:
                 type: "Task!"
+                access: "@=isAuthenticated()"
                 args:
                     id:
                         type: "Int!"
@@ -18,6 +36,7 @@ Mutation:
                 resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskMutationResolver').updateTask(args['id'], args['input'])"
             changeTaskStatus:
                 type: "Task!"
+                access: "@=isAuthenticated()"
                 args:
                     id:
                         type: "Int!"
@@ -26,6 +45,7 @@ Mutation:
                 resolve: "@=service('App\\\\UI\\\\GraphQL\\\\Resolver\\\\TaskMutationResolver').changeTaskStatus(args['id'], args['status'])"
             deleteTask:
                 type: "Boolean!"
+                access: "@=isAuthenticated()"
                 args:
                     id:
                         type: "Int!"

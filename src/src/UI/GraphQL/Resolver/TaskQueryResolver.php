@@ -14,6 +14,9 @@ final class TaskQueryResolver
     ) {
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function findById(int $id): ?array
     {
         $task = $this->taskRepository->findById($id);

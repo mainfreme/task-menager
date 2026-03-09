@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Factory;
 
 use App\Domain\Exception\UserCreationException;
-use App\Domain\Model\User\User;
+use App\Domain\Model\User\UserAggregate;
 use App\Domain\ValueObject\Address;
 use App\Domain\ValueObject\Company;
 use App\Domain\ValueObject\Email;
@@ -20,7 +20,7 @@ final class UserFactory implements UserFactoryInterface
      *
      * @throws UserCreationException
      */
-    public function createFromApiData(array $data): User
+    public function createFromApiData(array $data): UserAggregate
     {
         try {
             $this->validateRequiredFields($data);
@@ -33,7 +33,7 @@ final class UserFactory implements UserFactoryInterface
             $company = $this->createCompany($data['company'] ?? null);
             $passwordHash = $this->hashImportPassword();
 
-            return User::create(
+            return UserAggregate::create(
                 name: $data['name'],
                 username: $username,
                 email: $email,
@@ -113,8 +113,18 @@ final class UserFactory implements UserFactoryInterface
             return null;
         }
 
-        /** @phpstan-var array{street: string, suite: string, city: string, zipcode: string, geo: array{lat: string, lng: string}} $value */
-        return Address::fromArray($value);
+        $addressData = [
+            'street' => (string) $value['street'],
+            'suite' => (string) $value['suite'],
+            'city' => (string) $value['city'],
+            'zipcode' => (string) $value['zipcode'],
+            'geo' => [
+                'lat' => (string) $value['geo']['lat'],
+                'lng' => (string) $value['geo']['lng'],
+            ],
+        ];
+
+        return Address::fromArray($addressData);
     }
 
     private function createCompany(mixed $value): ?Company
@@ -130,8 +140,13 @@ final class UserFactory implements UserFactoryInterface
             }
         }
 
-        /** @phpstan-var array{name: string, catchPhrase: string, bs: string} $value */
-        return Company::fromArray($value);
+        $companyData = [
+            'name' => (string) $value['name'],
+            'catchPhrase' => (string) $value['catchPhrase'],
+            'bs' => (string) $value['bs'],
+        ];
+
+        return Company::fromArray($companyData);
     }
 
     private function hashImportPassword(): string

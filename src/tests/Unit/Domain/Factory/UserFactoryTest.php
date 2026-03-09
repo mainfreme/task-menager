@@ -6,7 +6,7 @@ namespace App\Tests\Unit\Domain\Factory;
 
 use App\Domain\Exception\UserCreationException;
 use App\Domain\Factory\UserFactory;
-use App\Domain\Model\User\User;
+use App\Domain\Model\User\UserAggregate;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +26,7 @@ final class UserFactoryTest extends TestCase
 
         $user = $this->factory->createFromApiData($apiData);
 
-        $this->assertInstanceOf(User::class, $user);
+        $this->assertInstanceOf(UserAggregate::class, $user);
         $this->assertEquals('Leanne Graham', $user->getName());
         $this->assertEquals('Bret', $user->getUsername()->getValue());
         $this->assertEquals('Sincere@april.biz', $user->getEmail()->getValue());

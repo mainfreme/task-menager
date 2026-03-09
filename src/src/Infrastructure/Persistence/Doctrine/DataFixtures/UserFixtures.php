@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\DataFixtures;
 
-use App\Domain\Model\User\User;
+use App\Domain\Model\User\UserAggregate;
 use App\Domain\ValueObject\Email;
 use App\Domain\ValueObject\Username;
 use App\Infrastructure\Persistence\Doctrine\Entity\UserEntity;
@@ -15,7 +15,7 @@ final class UserFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $user = User::create(
+        $user = UserAggregate::create(
             name: 'admin',
             username: Username::fromString('admin'),
             email: Email::fromString('admin@test.pl'),

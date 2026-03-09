@@ -11,7 +11,7 @@ use App\Domain\ValueObject\Phone;
 use App\Domain\ValueObject\Username;
 use App\Domain\ValueObject\Website;
 
-final class User
+final class UserAggregate
 {
     private ?int $id;
 

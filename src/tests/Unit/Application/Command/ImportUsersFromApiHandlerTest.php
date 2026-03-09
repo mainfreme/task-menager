@@ -9,7 +9,7 @@ use App\Application\Command\ImportUsersFromApiHandler;
 use App\Application\DTO\ImportUsersResult;
 use App\Domain\Exception\UserCreationException;
 use App\Domain\Factory\UserFactoryInterface;
-use App\Domain\Model\User\User;
+use App\Domain\Model\User\UserAggregate;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Domain\Service\UserApiAdapterInterface;
 use App\Domain\ValueObject\Email;
@@ -255,9 +255,9 @@ final class ImportUsersFromApiHandlerTest extends TestCase
         $this->assertSame(1, $result->failed);
     }
 
-    private function createTestUser(string $username, string $email): User
+    private function createTestUser(string $username, string $email): UserAggregate
     {
-        return User::create(
+        return UserAggregate::create(
             name: 'Test User',
             username: Username::fromString($username),
             email: Email::fromString($email),
